@@ -1,0 +1,11 @@
+geyser:
+  # Geyser gRPC endpoint details
+  url: "https://grpc.ny.shyft.to"    # Shyft public endpoint
+  api_key: "YOUR-SHYFT-TOKEN"        # Your API key from Shyft.to
+
+solana:
+  # Solana RPC connection and transfer settings
+  network: "devnet"                  # Network to use: devnet | testnet | mainnet-beta
+  sender_keypair_path: "sender_keypair.json" # Path to the file containing sender's private key
+  recipient_wallet: "RECIPIENT-PUBKEY" # Public key (base58) of the wallet receiving funds
+  amount: 0.01                       # Amount of SOL to send on each trigger

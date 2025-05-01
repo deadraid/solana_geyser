@@ -1,0 +1,11 @@
+/target
+**/*.rs.bk
+Cargo.lock
+.env
+*.keypair
+*.json
+sender_keypair.json
+recipient_keypair.json
+config.yaml
+.tmp
+.idea
