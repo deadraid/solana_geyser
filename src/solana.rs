@@ -92,3 +92,85 @@ pub async fn transfer_once(
         sig.to_string()
     })
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use solana_sdk::signature::Keypair;
+
+    #[test]
+    fn sol_to_lamports_valid() {
+        // Arrange
+        let sol = 1.5_f64;
+        let expected_lamports = 1_500_000_000_u64;
+
+        // Act
+        let result = sol_to_lamports(sol).unwrap();
+
+        // Assert
+        assert_eq!(result, expected_lamports);
+    }
+
+    #[test]
+    fn sol_to_lamports_negative() {
+        // Arrange
+        let sol = -0.1_f64;
+
+        // Act
+        let result = sol_to_lamports(sol);
+
+        // Assert
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn sol_to_lamports_overflow() {
+        // Arrange
+        let sol = (u64::MAX as f64 / LAMPORTS_PER_SOL as f64) + 1.0;
+
+        // Act
+        let result = sol_to_lamports(sol);
+
+        // Assert
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn rpc_url_mapping() {
+        // Arrange is implicit – using known network strings
+
+        // Act & Assert
+        assert_eq!(rpc_url("devnet"), "https://api.devnet.solana.com");
+        assert_eq!(rpc_url("testnet"), "https://api.testnet.solana.com");
+        assert_eq!(
+            rpc_url("mainnet-beta"),
+            "https://api.mainnet-beta.solana.com"
+        );
+    }
+
+    #[test]
+    fn parse_pubkey_valid() {
+        // Arrange
+        let kp = Keypair::new();
+        let pubkey_str = kp.pubkey().to_string();
+
+        // Act
+        let parsed = parse_pubkey(&pubkey_str).unwrap();
+
+        // Assert
+        assert_eq!(parsed, kp.pubkey());
+    }
+
+    #[test]
+    fn parse_pubkey_invalid() {
+        // Arrange
+        let bad_str = "invalid_pubkey";
+
+        // Act
+        let result = parse_pubkey(bad_str);
+
+        // Assert
+        assert!(result.is_err());
+    }
+}
